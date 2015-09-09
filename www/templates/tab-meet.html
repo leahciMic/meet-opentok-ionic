@@ -1,0 +1,38 @@
+<ion-view view-title="Meet">
+  <ion-content class="has-header" scroll="false">
+    <div class="list padding" ng-if="!meetController.hasInput">
+      <label class="item item-input">
+        <input type="text" placeholder="Room" ng-model="meetController.room">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Your name" ng-model="meetController.name">
+      </label>
+      <button class="button button-block button-positive" ng-click="meetController.connect()">Connect</button>
+    </div>
+    <opentok-session streams="meetController.streams" api-key="meetController.apiKey" session-id="meetController.sessionId" token="meetController.token">
+      <ion-slide-box style="width: 100%; height: 80%;" on-slide-changed="slideHasChanged($index)">
+        <ion-slide>
+          <opentok-publisher width="100%" height="100%"></opentok-publisher>
+        </ion-slide>
+        <ion-slide ng-repeat="stream in meetController.streams">
+          <opentok-subscriber width="100%" height="100%"
+            stream="stream">
+          </opentok-subscriber>
+        </ion-slide>
+      </ion-slide-box>
+      <div style="height: 20%;">
+        <opentok-subscriber
+          ng-repeat="(key, stream) in meetController.streams"
+          ng-click="meetController.selectVideo(key+1)"
+          style="width: {{100/meetController.streams.length}}%; height: 100%; float: left; cursor: pointer;"
+          audio-volume="0"
+          show-controls="false"
+          width="100%"
+          height="100%"
+          stream="stream">
+        </opentok-subscriber>
+      </div>
+      </ion-slide>
+    </opentok-session>
+  </ion-content>
+</ion-view>
